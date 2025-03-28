@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Artist
+{% endblock %}
+
+{% block body %}
+  <h1>Artist</h1>
+
+  <table class="table">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ artist.id }}</td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <td>{{ artist.name }}</td>
+      </tr>
+      <tr>
+        <th>ThumbnailUrl</th>
+        <td>{{ artist.thumbnailUrl }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a class="btn btn-primary" href="{{ path('app_artist_edit', { id: artist.id }) }}">edit</a>
+
+  <a class="btn btn-secondary" href="{{ path('app_artist_index') }}">back to list</a>
+
+  <div class="row g-2 my-4">
+    {% for release in artist.releases %}
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card">
+          <div class="ratio ratio-1x1">
+            <img class="card-img-top" src="{{ release.thumbnailUrl }}" alt="{{ release.title }}'s cover" />
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ release.title }}</h5>
+            <p class="card-text">{{ release.releasedAt|date('d M Y') }}</p>
+            <p class="card-text">{{ release.tracks|length }} songs for</p>
+            <a href="{{ path('app_release_show', { id: release.id }) }}" class="btn btn-primary">Show album</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <tr>
+        <td colspan="4">no records found</td>
+      </tr>
+    {% endfor %}
+  </div>
+
+  {{ include('artist/_delete_form.html.twig') }}
+{% endblock %}
