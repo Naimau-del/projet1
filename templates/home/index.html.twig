@@ -26,5 +26,11 @@
         </div>
     </div>
 {% endif %}
-</div>
+{% if app.user %}
+    <div class="row mt-4">
+        <div class="col-md-12 text-center">
+            <a href="{{ path('app_favoris') }}" class="btn btn-danger btn-lg w-50">Mes favoris</a>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}

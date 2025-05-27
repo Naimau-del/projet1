@@ -11,23 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
-    #[Route('/make-admin/{email}', name: 'make_admin')]
-    public function makeAdmin(string $email, EntityManagerInterface $em): Response
-    {
-        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-        if (!$user) {
-            return new Response('Utilisateur non trouvé');
-        }
-
-        $roles = $user->getRoles();
-        if (!in_array('ROLE_ADMIN', $roles)) {
-            $roles[] = 'ROLE_ADMIN';
-            $user->setRoles($roles);
-            $em->flush();
-        }
-
-        return new Response('Utilisateur promu admin !');
-    }
 
     #[Route('/admin/users', name: 'admin_users')]
     public function users(Request $request, EntityManagerInterface $em): Response
