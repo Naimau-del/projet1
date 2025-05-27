@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artistes{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-4">Liste des Artistes</h1>
+<style>
+    .card-img-top {
+        height: 360px;
+        object-fit: cover; 
+        background-color: #f8f9fa; 
+    }
+</style>
+    <div class="row">
+        {% for artiste in artistes %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ artiste.thumbnailURL ?: asset('images/default-thumbnail.png') }}" class="card-img-top" alt="Image de {{ artiste.Nom }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">{{ artiste.Nom }}</h5>
+                            <span 
+                                class="favorite-toggle" 
+                                data-id="{{ artiste.id }}" 
+                                style="cursor: pointer; font-size: 1.5rem; color: {{ artiste.favorite ? 'red' : 'gray' }};">
+                                {{ artiste.favorite ? '❤️' : '🤍' }}
+                            </span>
+                        </div>
+                        <form method="post" action="{{ path('app_artiste_delete', {'id': artiste.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet artiste ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artiste.id) }}">
+                            <button class="btn btn-danger mt-3">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p class="text-center">Aucun artiste trouvé.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_artiste_new') }}" class="btn btn-success">Créer un nouvel artiste</a>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="{{ path('home') }}" class="btn btn-primary">Revenir à l'accueil</a>
+    </div>
+    <script>
+         document.addEventListener('DOMContentLoaded', () => {
+            console.log('Artiste page loaded');
+            document.querySelectorAll('.favorite-toggle').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    const artisteId = this.getAttribute('data-id');
+                    const isFavorite = this.style.color === 'red';
+                    
+                    fetch(`/artiste/${artisteId}/toggle-favorite`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ favorite: !isFavorite })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.style.color = isFavorite ? 'gray' : 'red';
+                            this.innerHTML = isFavorite ? '🤍' : '❤️';
+                        }
+                    })
+                    .catch(error => console.error('Erreur:', error));
+                });
+            });
+        });
+    </script>
+{% endblock %}

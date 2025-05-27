@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pistes{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-4">Liste des Pistes</h1>
+    <style>
+        .card-img-top {
+            height: 360px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+        }
+    </style>
+    <div class="row">
+        {% for track in tracks %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ track.thumbnailURL ?: asset('images/default-thumbnail.jpg') }}" class="card-img-top" alt="Image de {{ track.name }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">{{ track.name }}</h5>
+                            <p class="text-muted mb-0"> {{ track.album.name|slice(0, 12)~ (track.album.name|length > 12 ? '...' : '') }}</p>
+                            <span 
+                                class="favorite-toggle" 
+                                data-id="{{ track.id }}" 
+                                style="cursor: pointer; font-size: 1.5rem; color: {{ track.favorite ? 'red' : 'gray' }};">
+                                {{ track.favorite ? '❤️' : '🤍' }}
+                            </span>
+                        </div>
+                        <p class="text-muted mb-0">Durée : {{ track.duration }} secondes</p>
+                        <p class="text-muted mb-0">Artiste : {{ track.album.artiste.Nom|slice(0, 10)~ (track.album.artiste.Nom|length > 10 ? '...' : '') }}</p>
+                        <form method="post" action="{{ path('app_track_delete', {'id': track.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette piste ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ track.id) }}">
+                            <button class="btn btn-danger mt-3">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p class="text-center">Aucune piste trouvée.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_track_new') }}" class="btn btn-success">Créer une nouvelle piste</a>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="{{ path('home') }}" class="btn btn-primary">Revenir à l'accueil</a>
+    </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Track page loaded');
+        document.querySelectorAll('.favorite-toggle').forEach(function(element) {
+            element.addEventListener('click', function() {
+                const trackId = this.getAttribute('data-id'); // Récupère l'ID du track
+                const isFavorite = this.style.color === 'red'; // Vérifie si c'est déjà un favori
+                
+                fetch(`/track/${trackId}/toggle-favorite`, { // Appelle la route pour toggle-favorite
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ favorite: !isFavorite }) // Envoie le nouveau statut
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Met à jour l'interface utilisateur
+                        this.style.color = isFavorite ? 'gray' : 'red';
+                        this.innerHTML = isFavorite ? '🤍' : '❤️';
+                    }
+                })
+                .catch(error => console.error('Erreur:', error));
+            });
+        });
+    });
+</script>
+{% endblock %}
