@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Favoris{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-4">Mes Favoris</h1>
+    <style>
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            background-color: #f8f9fa;
+        }
+    </style>
+
+    <section>
+        <h2>Artistes favoris</h2>
+        <div class="row">
+            {% for artist in favorite_artists %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ artist.thumbnailURL ?: asset('images/default-thumbnail.png') }}" class="card-img-top" alt="Image de {{ artist.nom }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ artist.nom }}</h5>
+                            <span style="font-size: 1.5rem; color: {{ artist.favorite ? 'red' : 'gray' }};">
+                                {{ artist.favorite ? '❤️' : '🤍' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">Aucun artiste favori.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section>
+        <h2>Albums favoris</h2>
+        <div class="row">
+            {% for album in favorite_albums %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ album.thumbnailURL ?: asset('images/default-thumbnail.jpg') }}" class="card-img-top" alt="Image de {{ album.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ album.name }}</h5>
+                            <span style="font-size: 1.5rem; color: {{ album.favorite ? 'red' : 'gray' }};">
+                                {{ album.favorite ? '❤️' : '🤍' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">Aucun album favori.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section>
+        <h2>Pistes favorites</h2>
+        <div class="row">
+            {% for track in favorite_tracks %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ track.thumbnailURL ?: asset('images/default-thumbnail.jpg') }}" class="card-img-top" alt="Image de {{ track.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ track.name }}</h5>
+                            <span style="font-size: 1.5rem; color: {{ track.favorite ? 'red' : 'gray' }};">
+                                {{ track.favorite ? '❤️' : '🤍' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">Aucune piste favorite.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
