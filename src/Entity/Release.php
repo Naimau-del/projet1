@@ -32,9 +32,6 @@ class Release
     #[ORM\OneToMany(mappedBy: 'album', targetEntity: Track::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $tracks;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private ?bool $favorite = false;
-
     public function __construct()
     {
         $this->tracks = new ArrayCollection();
@@ -114,7 +111,7 @@ class Release
     public function removeTrack(Track $track): static
     {
         if ($this->tracks->removeElement($track)) {
-            // set the owning side to null (unless already changed)
+            
             if ($track->getAlbum() === $this) {
                 $track->setAlbum(null);
             }
@@ -123,15 +120,4 @@ class Release
         return $this;
     }
 
-    public function isFavorite(): ?bool
-    {
-        return $this->favorite;
-    }
-
-    public function setFavorite(bool $favorite): static
-    {
-        $this->favorite = $favorite;
-
-        return $this;
-    }
 }

@@ -24,8 +24,7 @@ class Artiste
     #[ORM\OneToMany(targetEntity: Release::class, mappedBy: 'artiste', orphanRemoval: true)]
     private Collection $releases;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private ?bool $favorite = false;
+    
 
     public function __construct()
     {
@@ -82,7 +81,7 @@ class Artiste
     public function removeRelease(Release $release): static
     {
         if ($this->releases->removeElement($release)) {
-            // set the owning side to null (unless already changed)
+
             if ($release->getArtiste() === $this) {
                 $release->setArtiste(null);
             }
@@ -91,15 +90,5 @@ class Artiste
         return $this;
     }
 
-    public function isFavorite(): ?bool
-    {
-        return $this->favorite;
-    }
-
-    public function setFavorite(bool $favorite): static
-    {
-        $this->favorite = $favorite;
-
-        return $this;
-    }
+    
 }

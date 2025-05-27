@@ -80,15 +80,25 @@ class TrackController extends AbstractController
         return $this->redirectToRoute('app_track_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/toggle-favorite', name: 'app_track_toggle_favorite', methods: ['POST'])]
-public function toggleFavorite(Track $track, EntityManagerInterface $entityManager): JsonResponse
-{
-    $track->setFavorite(!$track->isFavorite());
-    $entityManager->flush();
+    #[Route('/{id}/toggle-favorite', name: 'track_toggle_favorite', methods: ['POST'])]
+    public function toggleFavorite(Track $track, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['success' => false], 403);
+        }
 
-    return new JsonResponse([
-        'success' => true,
-        'favorite' => $track->isFavorite(),
-    ]);
-}
+        if ($user->getFavoriteTracks()->contains($track)) {
+            $user->removeFavoriteTrack($track);
+            $favorite = false;
+        } else {
+            $user->addFavoriteTrack($track);
+            $favorite = true;
+        }
+        $em->flush();
+
+        return new JsonResponse(['success' => true, 'favorite' => $favorite]);
+    }
+
+
 }

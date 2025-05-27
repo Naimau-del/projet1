@@ -20,14 +20,16 @@
                     <div class="card">
                         <img src="{{ artist.thumbnailURL ?: asset('images/default-thumbnail.png') }}" class="card-img-top" alt="Image de {{ artist.nom }}">
                         <div class="card-body">
-                            <h5 class="card-title">{{ artist.nom }}</h5>
-                            <span 
-                                class="favorite-toggle favorite-toggle-artist"
-                                data-id="{{ artist.id }}"
-                                data-type="artist"
-                                style="cursor: pointer; font-size: 1.5rem; color: {{ artist.favorite ? 'red' : 'gray' }};">
-                                {{ artist.favorite ? '❤️' : '🤍' }}
-                            </span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">{{ artist.nom }}</h5>
+                                <span 
+                                    class="favorite-toggle favorite-toggle-artist ms-auto"
+                                    data-id="{{ artist.id }}"
+                                    data-type="artist"
+                                    style="cursor: pointer; font-size: 1.5rem; color: red;">
+                                    ❤️
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,14 +49,16 @@
                     <div class="card">
                         <img src="{{ album.thumbnailURL ?: asset('images/default-thumbnail.jpg') }}" class="card-img-top" alt="Image de {{ album.name }}">
                         <div class="card-body">
-                            <h5 class="card-title">{{ album.name }}</h5>
-                            <span 
-                                class="favorite-toggle favorite-toggle-album"
-                                data-id="{{ album.id }}"
-                                data-type="album"
-                                style="cursor: pointer; font-size: 1.5rem; color: {{ album.favorite ? 'red' : 'gray' }};">
-                                {{ album.favorite ? '❤️' : '🤍' }}
-                            </span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">{{ album.name }}</h5>
+                                <span 
+                                    class="favorite-toggle favorite-toggle-album ms-auto"
+                                    data-id="{{ album.id }}"
+                                    data-type="album"
+                                    style="cursor: pointer; font-size: 1.5rem; color: red;">
+                                    ❤️
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,14 +78,16 @@
                     <div class="card">
                         <img src="{{ track.thumbnailURL ?: asset('images/default-thumbnail.jpg') }}" class="card-img-top" alt="Image de {{ track.name }}">
                         <div class="card-body">
-                            <h5 class="card-title">{{ track.name }}</h5>
-                            <span 
-                                class="favorite-toggle favorite-toggle-track"
-                                data-id="{{ track.id }}"
-                                data-type="track"
-                                style="cursor: pointer; font-size: 1.5rem; color: {{ track.favorite ? 'red' : 'gray' }};">
-                                {{ track.favorite ? '❤️' : '🤍' }}
-                            </span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">{{ track.name }}</h5>
+                                <span 
+                                    class="favorite-toggle favorite-toggle-track ms-auto"
+                                    data-id="{{ track.id }}"
+                                    data-type="track"
+                                    style="cursor: pointer; font-size: 1.5rem; color: red;">
+                                    ❤️
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

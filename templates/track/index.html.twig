@@ -23,8 +23,8 @@
                             <span 
                                 class="favorite-toggle" 
                                 data-id="{{ track.id }}" 
-                                style="cursor: pointer; font-size: 1.5rem; color: {{ track.favorite ? 'red' : 'gray' }};">
-                                {{ track.favorite ? '❤️' : '🤍' }}
+                                style="cursor: pointer; font-size: 1.5rem; color: {{ app.user and track in app.user.favoriteTracks ? 'red' : 'gray' }};">
+                                {{ app.user and track in app.user.favoriteTracks ? '❤️' : '🤍' }}
                             </span>
                         </div>
                         <p class="text-muted mb-0">Durée : {{ track.duration }} secondes</p>

@@ -25,8 +25,8 @@
                             <span 
                                 class="favorite-toggle" 
                                 data-id="{{ release.id }}" 
-                                style="cursor: pointer; font-size: 1.5rem; color: {{ release.favorite ? 'red' : 'gray' }};">
-                                {{ release.favorite ? '❤️' : '🤍' }}
+                                style="cursor: pointer; font-size: 1.5rem; color: {{ app.user and release in app.user.favoriteReleases ? 'red' : 'gray' }};">
+                                {{ app.user and release in app.user.favoriteReleases ? '❤️' : '🤍' }}
                             </span>
                         </div>
                         {% if is_granted('ROLE_ADMIN') %}

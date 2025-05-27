@@ -80,16 +80,26 @@ class ArtisteController extends AbstractController
         return $this->redirectToRoute('app_artiste_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/toggle-favorite', name: 'app_artiste_toggle_favorite', methods: ['POST'])]
-    public function toggleFavorite(Artiste $artiste, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/{id}/toggle-favorite', name: 'artiste_toggle_favorite', methods: ['POST'])]
+    public function toggleFavorite(Artiste $artiste, EntityManagerInterface $em): JsonResponse
     {
-        $artiste->setFavorite(!$artiste->isFavorite());
-        $entityManager->flush();
-    
-        return new JsonResponse([
-            'success' => true,
-            'favorite' => $artiste->isFavorite(),
-        ]);
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['success' => false], 403);
+        }
+
+        if ($user->getFavoriteArtistes()->contains($artiste)) {
+            $user->removeFavoriteArtiste($artiste);
+            $favorite = false;
+        } else {
+            $user->addFavoriteArtiste($artiste);
+            $favorite = true;
+        }
+        $em->flush();
+
+        return new JsonResponse(['success' => true, 'favorite' => $favorite]);
     }
+
+
 }
 

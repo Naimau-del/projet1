@@ -80,15 +80,25 @@ class ReleaseController extends AbstractController
         return $this->redirectToRoute('app_release_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/toggle-favorite', name: 'app_release_toggle_favorite', methods: ['POST'])]
-    public function toggleFavorite(Release $release, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/{id}/toggle-favorite', name: 'release_toggle_favorite', methods: ['POST'])]
+    public function toggleFavorite(Release $release, EntityManagerInterface $em): JsonResponse
     {
-        $release->setFavorite(!$release->isFavorite());
-        $entityManager->flush();
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['success' => false], 403);
+        }
 
-        return new JsonResponse([
-            'success' => true,
-            'favorite' => $release->isFavorite(),
-        ]);
+        if ($user->getFavoriteReleases()->contains($release)) {
+            $user->removeFavoriteRelease($release);
+            $favorite = false;
+        } else {
+            $user->addFavoriteRelease($release);
+            $favorite = true;
+        }
+        $em->flush();
+
+        return new JsonResponse(['success' => true, 'favorite' => $favorite]);
     }
+
+
 }

@@ -26,9 +26,6 @@ class Track
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')] 
     private ?Release $album = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private ?bool $favorite = false;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -82,15 +79,4 @@ class Track
         return $this;
     }
 
-    public function isFavorite(): ?bool
-    {
-        return $this->favorite;
-    }
-
-    public function setFavorite(bool $favorite): static
-    {
-        $this->favorite = $favorite;
-
-        return $this;
-    }
 }

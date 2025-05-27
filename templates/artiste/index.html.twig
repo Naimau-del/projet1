@@ -20,10 +20,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">{{ artiste.Nom }}</h5>
                             <span 
-                                class="favorite-toggle" 
-                                data-id="{{ artiste.id }}" 
-                                style="cursor: pointer; font-size: 1.5rem; color: {{ artiste.favorite ? 'red' : 'gray' }};">
-                                {{ artiste.favorite ? '❤️' : '🤍' }}
+                            class="favorite-toggle" 
+                            data-id="{{ artiste.id }}" 
+                            style="cursor: pointer; font-size: 1.5rem; color: {{ app.user and artiste in app.user.favoriteArtistes ? 'red' : 'gray' }};">
+                            {{ app.user and artiste in app.user.favoriteArtistes ? '❤️' : '🤍' }}
                             </span>
                         </div>
                         {% if is_granted('ROLE_ADMIN') %}
@@ -60,16 +60,13 @@
                     
                     fetch(`/artiste/${artisteId}/toggle-favorite`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ favorite: !isFavorite })
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            this.style.color = isFavorite ? 'gray' : 'red';
-                            this.innerHTML = isFavorite ? '🤍' : '❤️';
+                            this.style.color = data.favorite ? 'red' : 'gray';
+                            this.innerHTML = data.favorite ? '❤️' : '🤍';
                         }
                     })
                     .catch(error => console.error('Erreur:', error));

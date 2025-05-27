@@ -15,9 +15,11 @@ class AdminController extends AbstractController
     #[Route('/admin/users', name: 'admin_users')]
     public function users(Request $request, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $users = $em->getRepository(User::class)->findAll();
 
-        // Pour l’édition rapide, tu peux gérer chaque formulaire dans la même page
+        
         $forms = [];
         foreach ($users as $user) {
             $forms[$user->getId()] = $this->createForm(UserAdminType::class, $user, [
@@ -34,6 +36,8 @@ class AdminController extends AbstractController
     #[Route('/admin/user/{id}/edit', name: 'admin_user_edit', methods: ['POST'])]
     public function editUser(Request $request, User $user, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $form = $this->createForm(UserAdminType::class, $user);
         $form->handleRequest($request);
 
@@ -48,6 +52,8 @@ class AdminController extends AbstractController
     #[Route('/admin/user/{id}/delete', name: 'admin_user_delete', methods: ['POST'])]
     public function deleteUser(User $user, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $em->remove($user);
         $em->flush();
         return $this->redirectToRoute('admin_users');

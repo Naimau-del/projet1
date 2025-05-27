@@ -14,6 +14,11 @@
                         {{ form_widget(accountForm.email, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(accountForm.email) }}
                     </div>
+                    <div class="mb-3">
+                        {{ form_label(accountForm.plainPassword) }}
+                        {{ form_widget(accountForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(accountForm.plainPassword) }}
+                    </div>
                     <button type="submit" class="btn btn-primary w-100">Enregistrer les modifications</button>
                 {{ form_end(accountForm) }}
             </div>
