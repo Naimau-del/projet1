@@ -1,4 +1,3 @@
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Bibliothèque Musicale{% endblock %}
@@ -19,18 +18,21 @@
             <a href="{{ path('app_track_index') }}" class="btn btn-info btn-lg w-100">Pistes</a>
         </div>
     </div>
+
     {% if is_granted('ROLE_ADMIN') %}
     <div class="row mt-4">
         <div class="col-md-12 text-center">
             <a href="{{ path('admin_users') }}" class="btn btn-warning btn-lg w-50">Gérer les utilisateurs</a>
         </div>
     </div>
-{% endif %}
-{% if app.user %}
+    {% endif %}
+
+    {% if app.user %}
     <div class="row mt-4">
         <div class="col-md-12 text-center">
             <a href="{{ path('app_favoris') }}" class="btn btn-danger btn-lg w-50">Mes favoris</a>
         </div>
     </div>
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}

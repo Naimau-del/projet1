@@ -19,7 +19,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">{{ track.name }}</h5>
-                            <p class="text-muted mb-0"> {{ track.album.name|slice(0, 12)~ (track.album.name|length > 12 ? '...' : '') }}</p>
+                            <p class="text-muted mb-0">{{ track.album.name|slice(0, 12) ~ (track.album.name|length > 12 ? '...' : '') }}</p>
                             <span 
                                 class="favorite-toggle" 
                                 data-id="{{ track.id }}" 
@@ -28,7 +28,8 @@
                             </span>
                         </div>
                         <p class="text-muted mb-0">Durée : {{ track.duration }} secondes</p>
-                        <p class="text-muted mb-0">Artiste : {{ track.album.artiste.Nom|slice(0, 10)~ (track.album.artiste.Nom|length > 10 ? '...' : '') }}</p>
+                        <p class="text-muted mb-0">Artiste : {{ track.album.artiste.Nom|slice(0, 10) ~ (track.album.artiste.Nom|length > 10 ? '...' : '') }}</p>
+                        
                         {% if is_granted('ROLE_ADMIN') %}
                         <form method="post" action="{{ path('app_track_delete', {'id': track.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette piste ?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ track.id) }}">
@@ -44,40 +45,41 @@
             </div>
         {% endfor %}
     </div>
-{% if is_granted('ROLE_ADMIN') %}
+
+    {% if is_granted('ROLE_ADMIN') %}
     <div class="text-center mt-4">
         <a href="{{ path('app_track_new') }}" class="btn btn-success">Créer une nouvelle piste</a>
     </div>
-{% endif %}
+    {% endif %}
+
     <div class="text-center mt-3">
         <a href="{{ path('home') }}" class="btn btn-primary">Revenir à l'accueil</a>
     </div>
-  <script>
+
+    <script>
     document.addEventListener('DOMContentLoaded', () => {
         console.log('Track page loaded');
         document.querySelectorAll('.favorite-toggle').forEach(function(element) {
             element.addEventListener('click', function() {
-                const trackId = this.getAttribute('data-id'); // Récupère l'ID du track
-                const isFavorite = this.style.color === 'red'; // Vérifie si c'est déjà un favori
+                const trackId = this.getAttribute('data-id');
+                const isFavorite = this.style.color === 'red';
                 
-                fetch(`/track/${trackId}/toggle-favorite`, { // Appelle la route pour toggle-favorite
+                fetch(`/track/${trackId}/toggle-favorite`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ favorite: !isFavorite }) // Envoie le nouveau statut
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Met à jour l'interface utilisateur
-                        this.style.color = isFavorite ? 'gray' : 'red';
-                        this.innerHTML = isFavorite ? '🤍' : '❤️';
+                        this.style.color = data.favorite ? 'red' : 'gray';
+                        this.innerHTML = data.favorite ? '❤️' : '🤍';
                     }
                 })
                 .catch(error => console.error('Erreur:', error));
             });
         });
     });
-</script>
+    </script>
 {% endblock %}

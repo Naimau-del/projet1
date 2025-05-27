@@ -111,7 +111,6 @@ class Release
     public function removeTrack(Track $track): static
     {
         if ($this->tracks->removeElement($track)) {
-            
             if ($track->getAlbum() === $this) {
                 $track->setAlbum(null);
             }
@@ -119,5 +118,4 @@ class Release
 
         return $this;
     }
-
 }

@@ -99,6 +99,4 @@ class ReleaseController extends AbstractController
 
         return new JsonResponse(['success' => true, 'favorite' => $favorite]);
     }
-
-
 }

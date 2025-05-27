@@ -78,5 +78,4 @@ class Track
 
         return $this;
     }
-
 }

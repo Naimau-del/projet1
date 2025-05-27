@@ -99,6 +99,4 @@ class TrackController extends AbstractController
 
         return new JsonResponse(['success' => true, 'favorite' => $favorite]);
     }
-
-
 }

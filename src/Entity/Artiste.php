@@ -24,8 +24,6 @@ class Artiste
     #[ORM\OneToMany(targetEntity: Release::class, mappedBy: 'artiste', orphanRemoval: true)]
     private Collection $releases;
 
-    
-
     public function __construct()
     {
         $this->releases = new ArrayCollection();
@@ -81,7 +79,6 @@ class Artiste
     public function removeRelease(Release $release): static
     {
         if ($this->releases->removeElement($release)) {
-
             if ($release->getArtiste() === $this) {
                 $release->setArtiste(null);
             }
@@ -89,6 +86,4 @@ class Artiste
 
         return $this;
     }
-
-    
 }
