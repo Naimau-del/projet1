@@ -41,6 +41,7 @@
             <button class="btn btn-outline-light ms-2" type="submit">Logout</button>
         </form>
     {% else %}
+        <a class="btn btn-outline-info ms-2" href="{{ path('app_login') }}">Login</a>
         <a class="btn btn-outline-light ms-2" href="{{ path('app_signup') }}">Signup</a>
     {% endif %}
 </div>

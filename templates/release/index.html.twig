@@ -29,10 +29,12 @@
                                 {{ release.favorite ? '❤️' : '🤍' }}
                             </span>
                         </div>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <form method="post" action="{{ path('app_release_delete', {'id': release.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet album ?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ release.id) }}">
                             <button class="btn btn-danger mt-3">Supprimer</button>
                         </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -42,11 +44,11 @@
             </div>
         {% endfor %}
     </div>
-
+{% if is_granted('ROLE_ADMIN') %}
     <div class="text-center mt-4">
         <a href="{{ path('app_release_new') }}" class="btn btn-success">Créer un nouvel album</a>
     </div>
-
+{% endif %}
     <div class="text-center mt-3">
         <a href="{{ path('home') }}" class="btn btn-primary">Revenir à l'accueil</a>
     </div>

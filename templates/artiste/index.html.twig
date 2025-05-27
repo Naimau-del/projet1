@@ -26,10 +26,13 @@
                                 {{ artiste.favorite ? '❤️' : '🤍' }}
                             </span>
                         </div>
-                        <form method="post" action="{{ path('app_artiste_delete', {'id': artiste.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet artiste ?');">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <form method="post" action="{{ path('app_artiste_delete', {'id': artiste.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet artiste ?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artiste.id) }}">
                             <button class="btn btn-danger mt-3">Supprimer</button>
                         </form>
+                        {% endif %}
+                        
                     </div>
                 </div>
             </div>
@@ -39,11 +42,11 @@
             </div>
         {% endfor %}
     </div>
-
+{% if is_granted('ROLE_ADMIN') %}
     <div class="text-center mt-4">
         <a href="{{ path('app_artiste_new') }}" class="btn btn-success">Créer un nouvel artiste</a>
     </div>
-
+{% endif %}
     <div class="text-center mt-3">
         <a href="{{ path('home') }}" class="btn btn-primary">Revenir à l'accueil</a>
     </div>
